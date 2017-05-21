@@ -2,7 +2,7 @@
 """Calculate the complete dependencies tree
 
 """
-from __future__ import unicode_literals, print_function
+
 
 import argparse
 import codecs
@@ -61,7 +61,7 @@ class DepTree(object):
         self.dependencies_by_package[package_name] = deps
         if not self.recursive:
             return
-        for other_package_name, version_constraints in self.dependencies_by_package[package_name].items():
+        for other_package_name, version_constraints in list(self.dependencies_by_package[package_name].items()):
             is_ignored = False
             if other_package_name in self.ignored_packages:
                 ignored_version = self.ignored_packages[other_package_name]
@@ -115,7 +115,7 @@ def main():
         print(package_name)
         print('=' * len(package_name))
         print('')
-        for other_package, constraints in dependencies.items():
+        for other_package, constraints in list(dependencies.items()):
             constraint_str = ''
             if constraints:
                 constraint_str = ', ' .join(['%s %s' % x for x in constraints])

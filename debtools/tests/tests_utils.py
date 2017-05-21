@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 from unittest import TestCase
 import pkg_resources
 from debtools.utils import get_control_data

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 import os
 from tarfile import InvalidHeaderError
 __author__ = 'Matthieu Gallet'
@@ -75,31 +75,31 @@ class ArFile(object):
 
     def getmember(self, name):
         self.__reset()
-        ar_info = self.next()
+        ar_info = next(self)
         while ar_info is not None and ar_info.name != name:
-            ar_info = self.next()
+            ar_info = next(self)
         return ar_info
 
     def getmembers(self):
         self.__reset()
         members = []
-        ar_info = self.next()
+        ar_info = next(self)
         while ar_info is not None:
             members.append(ar_info)
-            ar_info = self.next()
+            ar_info = next(self)
         return members
 
     def getnames(self):
         self.__reset()
         members = []
-        ar_info = self.next()
+        ar_info = next(self)
         while ar_info is not None:
             members.append(ar_info.name)
 
-            ar_info = self.next()
+            ar_info = next(self)
         return members
 
-    def next(self):
+    def __next__(self):
         self.fileobj.seek(self.__current_pos)
         data = self.fileobj.read(60)
         magic = data[58:60]  # byte
@@ -119,7 +119,7 @@ class ArFile(object):
     def extractall(self, path='.', members=None):
         members = set([x.name for x in members]) if members is not None else None
         self.__reset()
-        member = self.next()
+        member = next(self)
         while member is not None:
             if members is None or member.name in members:
                 fullpath = os.path.join(path, member.name)
@@ -129,7 +129,7 @@ class ArFile(object):
                     while data:
                         fd.write(data)
                         data = e.read(self.bufsize)
-            member = self.next()
+            member = next(self)
 
     def extract(self, member, path=''):
         self.__reset()
@@ -140,11 +140,11 @@ class ArFile(object):
     def extractfile(self, member):
         name = member.name if isinstance(member, ArInfo) else member
         self.__reset()
-        member = self.next()
+        member = next(self)
         while member is not None:
             if member.name == name:
                 return ArObjFile(self.fileobj, member.size)
-            member = self.next()
+            member = next(self)
 
     def add(self, name, arcname=None):
         pass

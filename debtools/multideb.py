@@ -5,7 +5,7 @@ python multideb.py
 
 You should use a `stdeb.cfg` configuration file
 """
-from __future__ import unicode_literals, print_function
+
 import argparse
 import codecs
 import glob
@@ -29,7 +29,7 @@ try:
     import configparser
 except ImportError:
     # noinspection PyUnresolvedReferences,PyPep8Naming
-    import ConfigParser as configparser
+    import configparser as configparser
 
 __author__ = 'Matthieu Gallet'
 
@@ -132,7 +132,7 @@ def main():
 
     if only_packages:
         packages_to_create = {package_name: package_version
-                              for (package_name, package_version) in packages_to_create.items()
+                              for (package_name, package_version) in list(packages_to_create.items())
                               if package_name in set(only_packages)}
 
     # create a temp dir and do the work
